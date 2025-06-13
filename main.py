@@ -1,14 +1,14 @@
 import os
-import sys 
+import sys
 from dotenv import load_dotenv
 from google import genai
 from google.genai import types
 
 
 def main():
-    verbose = False 
-    try: 
-        user_prompt = sys.argv[1] 
+    verbose = False
+    try:
+        user_prompt = sys.argv[1]
         if len(sys.argv) > 2 and sys.argv[2] == "--verbose":
             verbose = True
     except:
@@ -21,12 +21,18 @@ def main():
 
     client = genai.Client(api_key=api_key)
     messages = [types.Content(role="user", parts=[types.Part(text=user_prompt)])]
-    response = client.models.generate_content(
-            model="gemini-2.0-flash-001", 
-            contents=messages)
-    
+
     if verbose:
-        print(f"User prompt: {user_prompt}")
+        print(f"User prompt: {user_prompt}\n")
+
+    generate_content(client, messages, verbose)
+
+def generate_content(client, messages, verbose):
+    response = client.models.generate_content(
+            model="gemini-2.0-flash-001",
+            contents=messages)
+
+    if verbose:
         print(f"Prompt tokens: {response.usage_metadata.prompt_token_count}")
         print(f"Response tokens: {response.usage_metadata.candidates_token_count}")
 
@@ -34,4 +40,3 @@ def main():
 
 if __name__=="__main__":
     main()
-
