@@ -1,27 +1,48 @@
 import os
 
-def get_files_info(working_directory, directory="."):
+def get_files_info(working_directory, directory=None):
+    abs_working_dir = os.path.abspath(working_directory)
+    target_dir = abs_working_dir
+
+    if directory:
+        target_dir = os.path.abspath(os.path.join(working_directory, directory))
+    if not target_dir.startswith(abs_working_dir):
+        return f'Error: Cannot list "{directory}" as it is outside the permitted working directory'
+    if not os.path.isdir(target_dir):
+        return f'Error: "{directory}" is not a directory'
+
     try:
-        actual_target = os.path.join(working_directory, directory)
-        working_directory_abs = os.path.abspath(working_directory)
-        target_directory_abs = os.path.abspath(actual_target)
-        base_safe_zone = os.path.dirname(working_directory_abs)
+        files_info = []
 
-        if not (target_directory_abs == base_safe_zone or target_directory_abs.startswith(base_safe_zone + os.sep)):
-            return f'Error: Cannot list \"{directory}\" as it is outside the permitted working directory'
-
-        if not os.path.isdir(target_directory_abs):
-            return f'Error: \"{directory}\" is not a directory'
-
-        contents = ""
-        for item in os.listdir(target_directory_abs):
-            full_path = os.path.join(target_directory_abs, item)
-            contents += (
-                f"- {item}: file_size={os.path.getsize(full_path)} bytes, "
-                f"is_dir={os.path.isdir(full_path)}\n"
+        for filename in os.listdir(target_dir):
+            filepath = os.path.join(target_dir, filename)
+            file_size = 0
+            is_dir = os.path.isdir(filepath)
+            file_size = os.path.getsize(filepath)
+            files_info.append(
+                f"- {filename}: file_size={file_size} bytes, is_dir={is_dir}"
             )
-
-        return contents
+        return "\n".join(files_info)
     except Exception as e:
-        return f"Error: {e}"
+        return f"Error listing files: {e}"
 
+def get_file_content(working_directory, file_path):
+    abs_file_path = os.path.abspath(os.path.join(working_directory, file_path))
+    abs_working_dir = os.path.abspath(working_directory)
+
+    if not abs_file_path.startswith(abs_working_dir):
+        return f'Error: Cannot read "{file_path}" as it is outside the permitted working directory'
+    if not os.path.isfile(abs_file_path):
+        return f'Error: File not found or is not a regular file: "{file_path}"'
+
+    try:
+        MAX_CHARS = 10000
+
+        with open(abs_file_path, "r") as f:
+            file_content_string = f.read(MAX_CHARS)
+
+        if len(file_content_string) == MAX_CHARS:
+            file_content_string += f'[...File "{file_path}" truncated at 10000 characters]'
+        return file_content_string
+    except Exception as e:
+        return f"Error reading file: {e}"
