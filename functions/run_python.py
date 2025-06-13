@@ -33,7 +33,7 @@ def run_python_file(working_directory, file_path):
             return "No output produced."
         return "\n\n".join(output)
     except Exception as e:
-        return f"Error: writing to file: {e}"
+        return f"Error: runing python file: {e}"
 
 
 schema_run_python_file = types.FunctionDeclaration(
