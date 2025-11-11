@@ -15,7 +15,7 @@ This is the starter code used in Boot.dev's [Build an AI Agent in Python](https:
 
 ## Installation
 
-1. Clone the Repository
+1. Clone the repository.
 
 2. Create virtual environment and activate:
 ```bash
