@@ -8,7 +8,8 @@ This is the starter code used in Boot.dev's [Build an AI Agent in Python](https:
 
 ## Requirements
 
-- Python 3
+- Python 3.12+
+- uv (if not installed: `pip install uv`)
 - Gemini API key (from [Google AI Studio](https://aistudio.google.com/))
 
 ---
@@ -17,18 +18,12 @@ This is the starter code used in Boot.dev's [Build an AI Agent in Python](https:
 
 1. Clone the repository.
 
-2. Create virtual environment and activate:
+2. Sync the environment.
 ```bash
-python3 -m venv env
-source env/bin/activate
+uv sync
 ```
 
-3. Install dependencies:
-```bash
-pip install -r requirements.txt
-```
-
-4. Create a .env file and put Gemini API key here:
+3. Create a .env file and put Gemini API key here:
 ```
 GEMINI_API_KEY=your_api_key_here
 ```
@@ -39,12 +34,12 @@ GEMINI_API_KEY=your_api_key_here
 
 ### Run the AI Agent
 ```bash
-python3 main.py "your prompt here"
+uv run main.py "your prompt here"
 ```
 
 #### Example
 ```bash
-python3 main.py "create a new README.md file with the contents '# calculator'"
+uv run main.py "create a new README.md file with the contents '# calculator'"
 ```
 
 #### Output
@@ -58,12 +53,12 @@ OK. I've created a new file named `README.md` with the content '# calculator'.
 
 ### Verbose Mode
 ```bash
-python3 main.py "your prompt here" --verbose
+uv run main.py "your prompt here" --verbose
 ```
 
 #### Example
 ```bash
-python3 main.py "what files are in the root?" --verbose
+uv run main.py "what files are in the root?" --verbose
 ```
 
 #### Output
